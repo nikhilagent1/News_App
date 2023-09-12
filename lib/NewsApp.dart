@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:news_app/FetchNews.dart';
 import 'package:news_app/LoginPage.dart';
 import 'package:news_app/NewsArt.dart';
@@ -27,6 +28,11 @@ class _NewsAppState extends State<NewsApp> {
     });
   }
 
+  Future<void> logout() async {
+    await GoogleSignIn().disconnect();
+    FirebaseAuth.instance.signOut();
+  }
+
   @override
   void initState() {
     GetNews();
@@ -48,6 +54,7 @@ class _NewsAppState extends State<NewsApp> {
               child: IconButton(
                 onPressed: () async {
                   await FirebaseAuth.instance.signOut();
+                  logout();
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
@@ -61,25 +68,34 @@ class _NewsAppState extends State<NewsApp> {
           ]),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
-          : newsArt != null
+          : newsArt == null
               ? Center(child: Text('Failure'))
-              : PageView.builder(
-                  scrollDirection: Axis.vertical,
-                  // itemCount: 10,
-                  onPageChanged: (value) {
-                    GetNews();
-                  },
-                  itemBuilder: (context, index) {
-                    // FetchNews.fetchNews();
+              : Column(
+                  children: [
+                    Expanded(
+                      child: PageView.builder(
+                          scrollDirection: Axis.horizontal,
+                          // itemCount: 10,
+                          onPageChanged: (value) {
+                            GetNews();
+                          },
+                          itemBuilder: (context, index) {
+                            // FetchNews.fetchNews();
 
-                    return Center(
-                        child: NewsPage(
-                            url: newsArt!.url,
-                            newsHead: newsArt!.newsHead,
-                            newsDes: newsArt!.newsDes,
-                            cnt: newsArt!.cnt,
-                            newsUrl: newsArt!.newsUrl));
-                  }),
+                            return ListView(children: [
+                              Center(
+                                child: NewsPage(
+                                    url: newsArt!.url,
+                                    newsHead: newsArt!.newsHead,
+                                    newsDes: newsArt!.newsDes,
+                                    cnt: newsArt!.cnt,
+                                    newsUrl: newsArt!.newsUrl),
+                              )
+                            ]);
+                          }),
+                    ),
+                  ],
+                ),
     );
   }
 }

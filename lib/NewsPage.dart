@@ -19,9 +19,11 @@ class NewsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
           // Image.asset("Images/Login.jpg"),
           Image(
             image: NetworkImage(url),
@@ -37,14 +39,19 @@ class NewsPage extends StatelessWidget {
                 SizedBox(
                   height: 30,
                 ),
-                Text(newsHead, style: TextStyle(color: Colors.deepPurple)),
-                Text(newsDes, style: TextStyle(color: Colors.deepPurple)),
+                Text(newsHead,
+                    style: TextStyle(
+                        color: Colors.deepPurple,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold)),
+                Text(newsDes,
+                    style: TextStyle(color: Colors.deepPurple, fontSize: 18)),
                 Text(cnt, style: TextStyle(color: Colors.deepPurple)),
               ],
             ),
           ),
-
-          ElevatedButton(
+          Expanded(
+            child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepPurple,
                 shape: RoundedRectangleBorder(
@@ -53,7 +60,14 @@ class NewsPage extends StatelessWidget {
               onPressed: () {
                 print("Read More");
               },
-              child: Text("Read More", style: TextStyle(color: Colors.white)))
-        ]));
+              child: Text(
+                "Read More",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

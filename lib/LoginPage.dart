@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:news_app/ForgotPassword.dart';
 import 'package:news_app/NewsApp.dart';
 import 'package:news_app/Signup_page.dart';
@@ -46,6 +47,38 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+//-------------------------------------------------------------------------------------------google signin
+  googleLogin() async {
+    // print("google Login method Called");
+    GoogleSignIn _googleSignIn = GoogleSignIn();
+    try {
+      var result = await _googleSignIn.signIn();
+      if (result == null) {
+        return;
+      }
+      // print("Navigator.pushReplacement");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NewsApp(),
+        ),
+      );
+      // print("Executing Else part");
+      final userData = await result.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: userData.accessToken,
+        idToken: userData.idToken,
+      );
+      var finalResult =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      // print("Result $result");
+      // print(result!.displayName);
+      // print(result.email);
+      // print(result.photoUrl);
+    } catch (error) {
+      print(error);
+    }
+  }
   //------------------------------------------------------------------------------function end
 
   @override
@@ -242,24 +275,25 @@ class _LoginPageState extends State<LoginPage> {
                           IconButton(
                             onPressed: () {
                               print('Google pressed');
+                              googleLogin();
                             },
                             icon: ImageIcon(AssetImage('Images/google.png')),
                             iconSize: 50,
                           ),
-                          IconButton(
-                            onPressed: () {
-                              print('Facebook pressed');
-                            },
-                            icon: ImageIcon(AssetImage('Images/facebook.png')),
-                            iconSize: 50,
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              print('Twitter pressed');
-                            },
-                            icon: ImageIcon(AssetImage('Images/Twitter.png')),
-                            iconSize: 50,
-                          ),
+                          // IconButton(
+                          //   onPressed: () {
+                          //     print('Facebook pressed');
+                          //   },
+                          //   icon: ImageIcon(AssetImage('Images/facebook.png')),
+                          //   iconSize: 50,
+                          // ),
+                          // IconButton(
+                          //   onPressed: () {
+                          //     print('Twitter pressed');
+                          //   },
+                          //   icon: ImageIcon(AssetImage('Images/Twitter.png')),
+                          //   iconSize: 50,
+                          // ),
                         ],
                       )
                     ])),
