@@ -42,7 +42,7 @@ class NewsPage extends StatelessWidget {
                 Text(newsHead,
                     style: TextStyle(
                         color: Colors.deepPurple,
-                        fontSize: 18,
+                        fontSize: 18.0,
                         fontWeight: FontWeight.bold)),
                 Text(newsDes,
                     style: TextStyle(color: Colors.deepPurple, fontSize: 18)),
